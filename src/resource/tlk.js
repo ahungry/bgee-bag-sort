@@ -1,7 +1,7 @@
 // https://gibberlings3.github.io/iesdp/file_formats/ie_formats/tlk_v1.htm
 
 const Resource = require('./resource')
-const util = require('./util')
+const util = require('../util')
 
 class TlkEntry extends Resource {
   static fromBuf (buf, offset, stringsOffset) {

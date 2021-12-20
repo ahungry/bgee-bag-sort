@@ -7,9 +7,9 @@
 
 
 const Resource = require('./resource')
-const util = require('./util')
+const util = require('../util')
 
-class Item extends Resource {
+class Itm extends Resource {
   static fromBuf (buf) {
     const dv = util.makeDataView(buf)
 
@@ -17,7 +17,7 @@ class Item extends Resource {
     const strrefUnidentifed = dv.getUint32(8, 1)
     const strref = dv.getUint32(12, 1)
 
-    return new Item({ sigV, strrefUnidentifed, strref })
+    return new Itm({ sigV, strrefUnidentifed, strref })
   }
 
   constructor({ strref, strrefUnidentifed, sigV }) {
@@ -28,4 +28,4 @@ class Item extends Resource {
   }
 }
 
-module.exports = Item
+module.exports = Itm
