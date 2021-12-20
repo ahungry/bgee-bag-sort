@@ -11,4 +11,4 @@ game file.
 
 # License
 
-GPLv3
+LGPLv3 (same as NearInfinity)
