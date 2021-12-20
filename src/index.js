@@ -11,3 +11,15 @@ console.log(itm)
 console.log(tlk.getStrRef(305344))
 console.log(tlk.getStrRef(56859))
 console.log(tlk.getStrRef(itm.strref))
+
+// Try out the bag sort stuff
+
+const BagSort = require('./service/bag-sort')
+
+const entries = BagSort.fromSavFile('./data-samples/test.sav')
+const thbag05 = entries.getOneByName('THBAG05.sto')
+
+console.log(thbag05)
+console.log(thbag05.sortItems())
+
+entries.toSavFile('oop.sav')
