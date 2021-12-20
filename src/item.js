@@ -7,17 +7,17 @@
 
 
 const Resource = require('./resource')
+const util = require('./util')
 
 class Item extends Resource {
-  static fromFile = Resource.fromFile.bind(null, Item)
-  static fromBuf  = Resource.fromBuf.bind(null, Item)
+  static fromBuf (buf) {
+    const dv = util.makeDataView(buf)
 
-  static getFileFormat () {
-    return {
-      sigV:              { offset: 0  , size: 8, type: 'ascii' },
-      strrefUnidentifed: { offset: 8  , size: 4, type: 'uint32' },
-      strref:            { offset: 12 , size: 4, type: 'uint32' },
-    }
+    const sigV = buf.slice(0, 8).toString('ascii')
+    const strrefUnidentifed = dv.getUint32(8, 1)
+    const strref = dv.getUint32(12, 1)
+
+    return new Item({ sigV, strrefUnidentifed, strref })
   }
 
   constructor({ strref, strrefUnidentifed, sigV }) {
