@@ -54,7 +54,7 @@ function _getName (key) {
 // and then alphabetize afterwards
 function getName (resres) {
   const key = resres.toLowerCase()
-  let prefix = 'zzzz'
+  let prefix = 'yyyy'
   let prefix3 = key
     .replace(/^bd/, '')
     .replace(/^th/, '')
@@ -91,7 +91,20 @@ function getName (resres) {
     prefix3 = 'cowl'
   }
 
-  if (/reav/i.test(prefix3)) {
+  if (/cloak/i.test(rawName)) {
+    prefix3 = 'clck'
+  }
+
+  if (/boot/i.test(rawName)) {
+    prefix3 = 'boot'
+  }
+
+  if (/aegi/i.test(prefix3)) {
+    prefix3 = 'hamm'
+  }
+
+  // reaver
+  if (/ohre/i.test(prefix3)) {
     prefix3 = 'sw2h'
   }
 
@@ -103,7 +116,7 @@ function getName (resres) {
     prefix = 'armr'
   }
 
-  if (['amul', 'belt', 'clck', 'ring', 'brac'].includes(prefix3)) {
+  if (['amul', 'boot', 'belt', 'clck', 'ring', 'brac'].includes(prefix3)) {
     prefix = 'arm1'
   }
 
@@ -118,7 +131,7 @@ function getName (resres) {
 
   // Group weapons
   if (['sw1h', 'sw2h', 'dagg', 'ax1h', 'staf', 'sper', 'hamm', 'halb', 'blun',
-       'scim', 'waki', 'kata', 'wand'].includes(prefix3)) {
+       'scim', 'waki', 'kata'].includes(prefix3)) {
     prefix = 'weap'
   }
 
@@ -126,15 +139,25 @@ function getName (resres) {
     prefix = 'wep1'
   }
 
+  if (['wand'].includes(prefix3)) {
+    prefix = 'wep2'
+  }
+
   if (['misc'].includes(prefix3)) {
-    prefix = 'zzzz'
+    prefix = 'xxxx'
+  }
+
+  // We did not match it nicely, so just restore original prefix
+  // so things like rogue revision RR# are grouped together
+  if (prefix === 'yyyy') {
+    prefix3 = key.slice(0, 4)
   }
 
   const name = prefix + prefix3 + rawName
 
   console.log('prefix: ' + prefix + ' resres: ' + resres + ' name: ' + name)
 
-  return prefix === 'zzzz' ?  'zzzzzzzz' + rawName : name
+  return name
 }
 
 const setOverrideDir = s => overrideDir = s
