@@ -25,7 +25,6 @@ function getName (resres) {
   const key = resres.toLowerCase()
 
   if (itemMap[key]) {
-    console.log('oh...')
     return itemMap[key]
   }
 
