@@ -6,6 +6,7 @@ const util = require('../util')
 
 const itemNames = require('./items.json')
 const itemMap = {}
+const itemCache = {}
 const tlk = Tlk.fromBuf(util.slurp('./data-samples/dialog.tlk'))
 
 let overrideDir = './data-samples'
@@ -24,15 +25,34 @@ hydrateItemMap()
 function getName (resres) {
   const key = resres.toLowerCase()
 
-  if (itemMap[key]) {
-    return itemMap[key]
+  if (itemCache[key]) {
+    return itemCache[key]
   }
+
+  // if (itemMap[key]) {
+  //   return itemMap[key]
+  // }
 
   try {
     const itm = Itm.fromBuf(util.slurp(overrideDir + '/' + key + '.itm'))
-    return tlk.getStrRef(itm.strref)
+    const strref = tlk.getStrRef(itm.strref)
+
+    itemCache[key] = strref
+
+    return strref
   } catch (_) {
-    return 'zzz' + key
+    // Fallback - possible file didn't exist in overrides
+    if (itemMap[key]) {
+      itemCache[key] = itemMap[key]
+
+      return itemCache[key]
+    }
+
+    console.error('Could not find strref for: ' + key)
+
+    itemCache[key] = 'zzz' + key
+
+    return itemCache[key]
   }
 }
 
