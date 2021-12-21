@@ -14,6 +14,8 @@ console.log(NameService.getName('THBAG05'))
 console.log(NameService.getName('plat06'))
 console.log(NameService.getName('bag03'))
 console.log(NameService.getName('plat01'))
+console.log(NameService.getName('sw1h03'))
+console.log(NameService.getName('fake'))
 
 // const itm = Itm.fromBuf(util.slurp('./data-samples/thbag05.itm'))
 // const itm = Itm.fromBuf(util.slurp('./data-samples/plat06.itm'))

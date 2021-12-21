@@ -28,10 +28,12 @@ function getName (resres) {
     return itemMap[key]
   }
 
-  // TODO: Add some smartness around the casing here
-  const itm = Itm.fromBuf(util.slurp('./data-samples/' + key + '.itm'))
-
-  return tlk.getStrRef(itm.strref)
+  try {
+    const itm = Itm.fromBuf(util.slurp(overrideDir + '/' + key + '.itm'))
+    return tlk.getStrRef(itm.strref)
+  } catch (_) {
+    return key
+  }
 }
 
 const setOverrideDir = s => overrideDir = s
