@@ -56,6 +56,21 @@ class Bif extends Resource {
     this.fileEntries = []
     this.tilesetEntries = []
   }
+
+  getFileByIdx (idx) {
+    for (let i = 0; i < this.fileCount; i++) {
+      const bif = this.fileEntries[i]
+      const bifIdx = bif.resourceLocator & ((1 << 14) - 1)
+
+      console.log({bifIdx, idx})
+      // console.log(bif.resourceLocator.toString(2))
+      // console.log(bifIdx.toString(2))
+
+      if (bifIdx == idx) {
+        return bif
+      }
+    }
+  }
 }
 
 module.exports = Bif

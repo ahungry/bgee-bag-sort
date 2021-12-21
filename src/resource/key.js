@@ -6,23 +6,25 @@ const Resource = require('./resource')
 const util = require('../util')
 
 class KeyBifEntry extends Resource {
-  static fromBuf (buf) {
-    const dv = util.makeDataView(buf)
+  static fromBuf (buf, dv, offset) {
+    const bifLen = dv.getUint32(offset + 0, 1)
+    const bifOff = dv.getUint32(offset + 4, 1)
+    const bifFilenameLen = dv.getUint16(offset + 8, 1)
+    const bifFileLoc = dv.getUint16(offset + 10, 1)
 
-    const bifLen = dv.getUint32(0, 1)
-    const bifOff = dv.getUint32(4, 1)
-    const bifFilenameLen = dv.getUint16(8, 1)
-    const bifFileLoc = dv.getUint16(10, 1)
+    const name = util.bufToStringNul(buf.slice(bifOff, bifOff + bifFilenameLen))
+    console.log('bif namen: ' + name)
 
-    return new KeyBifEntry({ bifLen, bifOff, bifFilenameLen, bifFileLoc })
+    return new KeyBifEntry({ bifLen, bifOff, bifFilenameLen, bifFileLoc, name })
   }
 
-  constructor({ bifLen, bifOff, bifFilenameLen, bifFileLoc }) {
+  constructor({ bifLen, bifOff, bifFilenameLen, bifFileLoc, name }) {
     super()
     this.bifLen = bifLen
     this.bifOff = bifOff
     this.bifFilenameLen = bifFilenameLen
     this.bifFileLoc = bifFileLoc
+    this.name = name
   }
 }
 
@@ -56,6 +58,17 @@ class KeyResourceEntry extends Resource {
 
     return this
   }
+
+  // bits 31-20: source index (the ordinal value giving the index of the corresponding BIF entry)
+  // bits 19-14: tileset index
+  // bits 13- 0: non-tileset file index (any 12 bit value, so long as it matches the value used in the BIF file)
+  getBifSourceIndex () {
+    return this.resourceLocator >> (32 - 12)
+  }
+
+  getFileIndex () {
+    return this.resourceLocator & ((1 << 14) - 1)
+  }
 }
 
 class Key extends Resource {
@@ -74,7 +87,7 @@ class Key extends Resource {
     // Each is 12 bytes
     for (let i = 0; i < bifCount; i++) {
       offset = 12 * i
-      const entry = KeyBifEntry.fromBuf(buf.slice(offset + bifOffset))
+      const entry = KeyBifEntry.fromBuf(buf, dv, offset + bifOffset)
       instance.bifEntries.push(entry)
     }
 
@@ -101,12 +114,27 @@ class Key extends Resource {
     this.resourceEntries = []
   }
 
+  getBifByName (s) {
+    for (let i = 0; i < this.bifCount; i++) {
+      if (this.bifEntries[i].name == s) {
+        return this.bifEntries[i]
+      }
+    }
+  }
+
   getByResref (s) {
     for (let i = 0; i < this.resourceCount; i++) {
       if (this.resourceEntries[i].resref == s) {
         return this.resourceEntries[i].hydrate()
       }
     }
+  }
+
+  getBifByResRef (s) {
+    const resref = this.getByResref(s)
+    const sourceIdx = resref.getBifSourceIndex()
+
+    return this.bifEntries[sourceIdx]
   }
 }
 
