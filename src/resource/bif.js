@@ -88,7 +88,8 @@ class Bif extends Resource {
   // Comparing last 12 bits is stated in in one part, another
   // says that only 0-13 are in another etc.
   getFileByIdx (idx) {
-    // return this.fileEntries[idx]
+    return this.fileEntries[idx]
+
     for (let i = 0; i < this.fileEntries.length; i++) {
       const bif = this.fileEntries[i]
       // let bifIdx = bif.resourceLocator & ((1 << 12) - 1)
