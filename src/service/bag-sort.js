@@ -7,10 +7,7 @@ const fs = require('fs')
 const p = require('process')
 const zlib = require('zlib')
 
-// TODO: Look into StringTable / ResourceRef / ItmResource
-// to figure out how lang/en_US/dialog.tlk is storing full item
-// names based off of some offset from the specific key name
-const itemNames = require('./items.json')
+const NameService = require('./name')
 
 const { bufToStringNul } = require('../util')
 
@@ -67,7 +64,7 @@ class Entry {
   }
 
   constructor ({ cdata, fileNameLen, fileName, compLen, uncompLen, sanityHeader }) {
-    console.log('a new entry was found: ' + fileName)
+    // console.log('a new entry was found: ' + fileName)
     this.cdata = cdata
     this.fileNameLen = fileNameLen
     this.fileName = fileName
@@ -131,7 +128,7 @@ class Entry {
 
 class StoreEntry extends Entry {
   constructor (m) {
-    console.log('a new store entry was found: ' + m.fileName)
+    // console.log('a new store entry was found: ' + m.fileName)
     super(m)
   }
 
@@ -165,14 +162,12 @@ class StoreEntry extends Entry {
       items.push({ bytes: item, name: item.toString('ascii') })
     }
 
-    // TODO: Figure out how to translate the basic key used here into
-    // an actual item name, so we can do alphabetical bag order
     const sorted = items.sort((a, b) => {
       let sa = bufToStringNul(a.bytes.slice(0, 14))
       let sb = bufToStringNul(b.bytes.slice(0, 14))
 
-      sa = itemNames[sa] || 'zzz' + sa
-      sb = itemNames[sb] || 'zzz' + sb
+      sa = NameService.getName(sa)
+      sb = NameService.getName(sb)
 
       return sa > sb ? 1 : -1
     })

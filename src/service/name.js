@@ -25,6 +25,7 @@ function getName (resres) {
   const key = resres.toLowerCase()
 
   if (itemMap[key]) {
+    console.log('oh...')
     return itemMap[key]
   }
 
@@ -32,7 +33,7 @@ function getName (resres) {
     const itm = Itm.fromBuf(util.slurp(overrideDir + '/' + key + '.itm'))
     return tlk.getStrRef(itm.strref)
   } catch (_) {
-    return key
+    return 'zzz' + key
   }
 }
 

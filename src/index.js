@@ -1,65 +1,44 @@
 const p = require('process')
 
-const Bif = require('./resource/bif')
-const Key = require('./resource/key')
-const Itm = require('./resource/itm')
-const Tlk  = require('./resource/tlk')
-const util = require('./util')
-
+const BagSort     = require('./service/bag-sort')
+const Bif         = require('./resource/bif')
+const Itm         = require('./resource/itm')
+const Key         = require('./resource/key')
 const NameService = require('./service/name')
+const Tlk         = require('./resource/tlk')
+const util        = require('./util')
 
-NameService.setOverrideDir('/home/mcarter/bgee/bgeet/override')
+function help() {
+  console.error(
+    'Usage: \n\n' + p.argv[0] + ' ' + p.argv[1] +
+      ' --sav /path/to/save/BALDUR.sav --override /path/to/override --bag THBAG05.sto --out new.sav \n'
+  )
+  p.exit()
+}
 
-console.log(NameService.getName('THBAG05'))
-console.log(NameService.getName('plat06'))
-console.log(NameService.getName('bag03'))
-console.log(NameService.getName('plat01'))
-console.log(NameService.getName('sw1h03'))
-console.log(NameService.getName('fake'))
+if (p.argv.length < 4) {
+  help()
+}
 
-// const itm = Itm.fromBuf(util.slurp('./data-samples/thbag05.itm'))
-// const itm = Itm.fromBuf(util.slurp('./data-samples/plat06.itm'))
-// const tlk = Tlk.fromBuf(util.slurp('./data-samples/dialog.tlk'))
+const opts = {}
 
-// console.log(itm)
-// // console.log(tlk.getStrRef(305344))
-// // console.log(tlk.getStrRef(56859))
-// console.log(tlk.getStrRef(itm.strref))
-// p.exit()
+for (let i = 2; i < p.argv.length; i++) {
+  switch (p.argv[i]) {
+    case '--sav': opts.sav = p.argv[++i]; break
+    case '--override': opts.overrides = p.argv[++i]; break
+    case '--bag': opts.bag = p.argv[++i]; break
+    case '--out': opts.out = p.argv[++i]; break
+    default: help(); break
+  }
+}
 
-// // Try out the bag sort stuff
+if ([opts.sav, opts.overrides, opts.bag, opts.out].includes(undefined)) {
+  help()
+}
 
-// // const BagSort = require('./service/bag-sort')
-// // const entries = BagSort.fromSavFile('./data-samples/test.sav')
-// // const thbag05 = entries.getOneByName('THBAG05.sto')
-// // console.log(thbag05)
-// // console.log(thbag05.sortItems())
-// // entries.toSavFile('oop.sav')
+NameService.setOverrideDir(opts.overrides)
 
-// const bif = Bif.fromBuf(util.slurp('./data-samples/items.bif'))
-// console.log(bif)
-
-// const key = Key.fromBuf(util.slurp('./data-samples/chitin.key'))
-
-// // KeyResourceEntry {
-// //   resref: 'PLAT06',
-// //   resourceType: 1005,
-// //   resourceLocator: 1049794
-// // }
-// const x = key.getByResref('PLAT01')
-
-// console.log(key.getByResref('PLAT01'))
-// console.log(key.getByResref('PLAT01').getFileIndex())
-
-// console.log(key.getByResref('PLAT02'))
-// console.log(key.getByResref('PLAT02').getFileIndex())
-
-// console.log(key.getByResref('PLAT04'))
-// console.log(key.getByResref('PLAT04').getFileIndex())
-
-// const itemData = bif.getFileByIdx(x.getFileIndex())
-// console.log({itemData})
-// // console.log('strref is: ' + tlk.getStrRef(54735))
-// console.log('strref is: ' + tlk.getStrRef(54341))
-// // console.log('strref is: ' + tlk.getStrRef(6146))
-// // console.log('strref is: ' + tlk.getStrRef(5963776))
+const entries = BagSort.fromSavFile(opts.sav)
+const thbag05 = entries.getOneByName(opts.bag)
+thbag05.sortItems()
+entries.toSavFile(opts.out)
