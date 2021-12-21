@@ -39,8 +39,8 @@ class Bif extends Resource {
     // Each is 16 bytes
     for (let i = 0; i < fileCount; i++) {
       const entry = BifFileEntry.fromBuf(buf.slice(offset + fileOffset))
-      instance.fileEntries.push(entry)
       offset = 16 * i
+      instance.fileEntries.push(entry)
     }
 
     return instance
@@ -55,18 +55,6 @@ class Bif extends Resource {
     this.fileOffset = fileOffset
     this.fileEntries = []
     this.tilesetEntries = []
-  }
-
-  // Pre-indexing ~30MB of data takes too long, just keep the one buffer
-  // and jump the strref index on demand.
-  getStrRef (id) {
-    const entry = BifEntry.fromBuf(
-      this.buf,
-      18 + (id * 26), // 18 bytes of header, each entry idx is 26 bytes
-      this.stringsOffset,
-    )
-
-    return entry.stringContent.toString('ascii')
   }
 }
 

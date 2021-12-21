@@ -1,6 +1,7 @@
 const p = require('process')
 
 const Bif = require('./resource/bif')
+const Key = require('./resource/key')
 const Itm = require('./resource/itm')
 const Tlk  = require('./resource/tlk')
 const util = require('./util')
@@ -23,5 +24,14 @@ console.log(tlk.getStrRef(itm.strref))
 // entries.toSavFile('oop.sav')
 
 const bif = Bif.fromBuf(util.slurp('./data-samples/items.bif'))
-
 console.log(bif)
+
+const key = Key.fromBuf(util.slurp('./data-samples/chitin.key'))
+
+// KeyResourceEntry {
+//   resref: 'PLAT06',
+//   resourceType: 1005,
+//   resourceLocator: 1049794
+// }
+const ankhegPlate = key.getByResref('PLAT06')
+console.log(ankhegPlate)
