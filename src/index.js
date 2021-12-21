@@ -28,16 +28,25 @@ console.log(bif)
 
 const key = Key.fromBuf(util.slurp('./data-samples/chitin.key'))
 
-console.log('Total bif count is: ' + key.bifCount)
-console.log('First bif entry is: ' , key.bifEntries[0])
-console.log('First bif entry is: ' , key.bifEntries[1])
-
 // KeyResourceEntry {
 //   resref: 'PLAT06',
 //   resourceType: 1005,
 //   resourceLocator: 1049794
 // }
-const x = key.getByResref('SW1H05') // some sword
+const x = key.getByResref('PLAT01')
+
+console.log(key.getByResref('PLAT01'))
+console.log(key.getByResref('PLAT01').getFileIndex())
+
+console.log(key.getByResref('PLAT02'))
+console.log(key.getByResref('PLAT02').getFileIndex())
+
+console.log(key.getByResref('PLAT04'))
+console.log(key.getByResref('PLAT04').getFileIndex())
 
 const itemData = bif.getFileByIdx(x.getFileIndex())
 console.log({itemData})
+// console.log('strref is: ' + tlk.getStrRef(54735))
+// console.log('strref is: ' + tlk.getStrRef(54341))
+// console.log('strref is: ' + tlk.getStrRef(6146))
+// console.log('strref is: ' + tlk.getStrRef(5963776))

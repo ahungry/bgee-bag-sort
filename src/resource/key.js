@@ -65,11 +65,11 @@ class KeyResourceEntry extends Resource {
   getBifSourceIndex () {
     // NI uses BIFFResourceEntry as such - close to what I came up with - why the mask...?
     // int sourceIndex = (locator >> 20) & 0xfff;
-    return this.resourceLocator >> (32 - 12)
+    return this.resourceLocator >> (32 - 12);
   }
 
   getFileIndex () {
-    return this.resourceLocator & ((1 << 14) - 1)
+    return this.resourceLocator & ((1 << 12) - 1)
   }
 }
 
