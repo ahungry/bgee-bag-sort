@@ -63,6 +63,8 @@ class KeyResourceEntry extends Resource {
   // bits 19-14: tileset index
   // bits 13- 0: non-tileset file index (any 12 bit value, so long as it matches the value used in the BIF file)
   getBifSourceIndex () {
+    // NI uses BIFFResourceEntry as such - close to what I came up with - why the mask...?
+    // int sourceIndex = (locator >> 20) & 0xfff;
     return this.resourceLocator >> (32 - 12)
   }
 

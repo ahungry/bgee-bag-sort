@@ -37,24 +37,7 @@ console.log('First bif entry is: ' , key.bifEntries[1])
 //   resourceType: 1005,
 //   resourceLocator: 1049794
 // }
-const x = key.getByResref('PLAT01') // ankheg plate
-const y = key.getByResref('PLAT06') // ankheg plate
-const xi = x.getFileIndex()
-const yi = y.getFileIndex()
-const xbif = x.getBifSourceIndex()
-const ybif = y.getBifSourceIndex()
-
-console.log({xbif, ybif, x, y, xi, yi, xb: xi.toString(2), yb: yi.toString(2) })
-
-console.log(key.getBifByResRef('PLAT01'))
-console.log(key.getBifByResRef('PLAT06'))
-
-// const xBifIdx = x.getBifSourceIndex()
-// const xFileIdx = x.getFileIndex()
-
-// const xbif = key.getBifByResRef('PLAT01')
-
-// console.log({ x, xBifIdx, xFileIdx, xbif })
+const x = key.getByResref('SW1H05') // some sword
 
 const itemData = bif.getFileByIdx(x.getFileIndex())
 console.log({itemData})

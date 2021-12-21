@@ -11,6 +11,8 @@ const util = require('../util')
 
 class Itm extends Resource {
   static fromBuf (buf) {
+    if (buf.length < 16) { return null }
+
     const dv = util.makeDataView(buf)
 
     const sigV = buf.slice(0, 8).toString('ascii')
