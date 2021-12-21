@@ -1,5 +1,6 @@
 const p = require('process')
 
+const Bif = require('./resource/bif')
 const Itm = require('./resource/itm')
 const Tlk  = require('./resource/tlk')
 const util = require('./util')
@@ -14,12 +15,13 @@ console.log(tlk.getStrRef(itm.strref))
 
 // Try out the bag sort stuff
 
-const BagSort = require('./service/bag-sort')
+// const BagSort = require('./service/bag-sort')
+// const entries = BagSort.fromSavFile('./data-samples/test.sav')
+// const thbag05 = entries.getOneByName('THBAG05.sto')
+// console.log(thbag05)
+// console.log(thbag05.sortItems())
+// entries.toSavFile('oop.sav')
 
-const entries = BagSort.fromSavFile('./data-samples/test.sav')
-const thbag05 = entries.getOneByName('THBAG05.sto')
+const bif = Bif.fromBuf(util.slurp('./data-samples/items.bif'))
 
-console.log(thbag05)
-console.log(thbag05.sortItems())
-
-entries.toSavFile('oop.sav')
+console.log(bif)
