@@ -28,8 +28,21 @@ for (let i = 2; i < p.argv.length; i++) {
     case '--override': opts.overrides = p.argv[++i]; break
     case '--bag': opts.bag = p.argv[++i]; break
     case '--out': opts.out = p.argv[++i]; break
+    case '--item': opts.item = p.argv[++i]; break
     default: help(); break
   }
+}
+
+if (opts.item) {
+  if ([opts.overrides].includes(undefined)) {
+    help()
+  }
+
+  NameService.setOverrideDir(opts.overrides)
+  console.log(NameService.getItem(opts.item))
+  console.log(NameService.getName(opts.item))
+
+  p.exit()
 }
 
 if ([opts.sav, opts.overrides, opts.bag, opts.out].includes(undefined)) {

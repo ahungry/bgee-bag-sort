@@ -22,6 +22,16 @@ function hydrateItemMap () {
 
 hydrateItemMap()
 
+function getItem (key) {
+  key = key.toLowerCase()
+
+  try {
+    return Itm.fromBuf(util.slurp(overrideDir + '/' + key + '.itm'))
+  } catch (e) {
+    return { err: e.message }
+  }
+}
+
 function _getName (key) {
   if (itemCache[key]) {
     return itemCache[key]
@@ -50,22 +60,10 @@ function _getName (key) {
   }
 }
 
-// Wrapper for _getName that will attempt to group items by their type (via prefix)
-// and then alphabetize afterwards
-function getName (resres) {
-  const key = resres.toLowerCase()
-  let prefix = 'yyyy'
-  let prefix3 = key
-    .replace(/^bd/, '')
-    .replace(/^th/, '')
-    .replace(/^.*?#[v]*/, '')
-    .slice(0, 4)
-
+function getPrefixGroup (rawName, prefix, prefix3) {
   if (/^bow/.test(prefix3)) {
     prefix3 = 'boww'
   }
-
-  const rawName = _getName(key)
 
   if (/robe/i.test(rawName)) {
     prefix3 = 'robe'
@@ -135,7 +133,7 @@ function getName (resres) {
     prefix = 'weap'
   }
 
-  if (['shld'].includes(prefix3)) {
+  if (['shld', 'shbu', 'shlg', 'shmd', 'shsm'].includes(prefix3)) {
     prefix = 'wep1'
   }
 
@@ -144,22 +142,45 @@ function getName (resres) {
   }
 
   if (['misc'].includes(prefix3)) {
-    prefix = 'xxxx'
+    prefix = 'zzzz'
   }
 
-  // We did not match it nicely, so just restore original prefix
-  // so things like rogue revision RR# are grouped together
-  if (prefix === 'yyyy') {
-    prefix3 = key.slice(0, 4)
+  return { prefix, prefix3 }
+}
+
+// Wrapper for _getName that will attempt to group items by their type (via prefix)
+// and then alphabetize afterwards
+function getName (resres) {
+  const key = resres.toLowerCase()
+  let prefix = 'xxxx'
+  let prefix3 = key
+    .replace(/^bd/, '')
+    .replace(/^th/, '')
+    .replace(/^.*?#[v]*/, '')
+    .slice(0, 4)
+
+  const rawName = _getName(key)
+  let prefixGroup = getPrefixGroup(rawName, prefix, prefix3)
+  prefix = prefixGroup.prefix
+  prefix3 = prefixGroup.prefix3
+
+  // Fallback group for things that didn't get matched earlier
+  if (prefix === 'xxxx') {
+    const item = getItem(key)
+    prefix3 = (item.rtype || prefix3).toLowerCase()
+    let prefixGroup = getPrefixGroup(rawName, prefix, prefix3)
+    prefix = prefixGroup.prefix
+    prefix3 = prefixGroup.prefix3
   }
 
-  const name = prefix + prefix3 + rawName
+  const name = `${prefix}${prefix3}${rawName}`
 
-  console.log('prefix: ' + prefix + ' resres: ' + resres + ' name: ' + name)
+  // console.log('prefix: ' + prefix + ' resres: ' + resres + ' name: ' + name)
+  console.log({ name })
 
   return name
 }
 
 const setOverrideDir = s => overrideDir = s
 
-module.exports = { getName, setOverrideDir }
+module.exports = { getItem, getName, setOverrideDir }
