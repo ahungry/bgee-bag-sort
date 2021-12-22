@@ -110,7 +110,8 @@ function getPrefixGroup (rawName, prefix, prefix3) {
     prefix3 = 'helm'
   }
 
-  if (['robe', 'leat', 'chan', 'plat'].includes(prefix3)) {
+  if (['robe', 'leat', 'chan', 'plat', 'armr', 'slea', 'pelt', 'hide',
+       'chan', 'spli', 'plah', 'plaf'].includes(prefix3)) {
     prefix = 'armr'
   }
 
@@ -129,7 +130,7 @@ function getPrefixGroup (rawName, prefix, prefix3) {
 
   // Group weapons
   if (['sw1h', 'sw2h', 'dagg', 'ax1h', 'staf', 'sper', 'hamm', 'halb', 'blun',
-       'scim', 'waki', 'kata'].includes(prefix3)) {
+       'scim', 'waki', 'kata', 'sw3h', 'mace'].includes(prefix3)) {
     prefix = 'weap'
   }
 
@@ -142,6 +143,10 @@ function getPrefixGroup (rawName, prefix, prefix3) {
   }
 
   if (['misc'].includes(prefix3)) {
+    prefix = 'yyyy'
+  }
+
+  if (['plot'].includes(prefix3)) {
     prefix = 'zzzz'
   }
 
