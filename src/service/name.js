@@ -181,7 +181,7 @@ function getName (resres) {
   const name = `${prefix}${prefix3}${rawName}`
 
   // console.log('prefix: ' + prefix + ' resres: ' + resres + ' name: ' + name)
-  console.log({ name })
+  // console.log({ name })
 
   return name
 }

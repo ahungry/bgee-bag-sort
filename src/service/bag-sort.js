@@ -162,6 +162,8 @@ class StoreEntry extends Entry {
       items.push({ bytes: item, name: item.toString('ascii') })
     }
 
+    console.info('About to sort ' + items.length + ' items...')
+
     const sorted = items.sort((a, b) => {
       let sa = bufToStringNul(a.bytes.slice(0, 14))
       let sb = bufToStringNul(b.bytes.slice(0, 14))
